@@ -28,16 +28,20 @@ export default class OrganizationChart extends React.Component<
       .then((client: MSGraphClientV3): void => {
         client
           .api("/me")
-          .select("displayName,jobTitle")
+          //.select("userPrincipalName,displayName,jobTitle")
           .get((error, response: any, rawResponse?: any) => {
+            console.log(response);
             this.setState({
               Me: {
+                imageUrl: this.getProfilePhoto(response.userPrincipalName),
                 text: response.displayName,
                 secondaryText: response.jobTitle,
               },
             });
           });
       });
+
+    console.log(this.state.Me);
 
     this.props.context.msGraphClientFactory
       .getClient("3")
@@ -76,28 +80,48 @@ export default class OrganizationChart extends React.Component<
       });
   }
 
+  private getProfilePhoto(userPrincipalName: string) {
+    console.log(userPrincipalName);
+    let blobUrl: string;
+    this.props.context.msGraphClientFactory
+      .getClient("3")
+      .then((client: MSGraphClientV3): void => {
+        client
+          .api("/users/" + userPrincipalName + "/photo/$value")
+          //.select("displayName,jobTitle")
+          .get((error, response: any, rawResponse?: any) => {
+            //console.log(response);
+
+            const url = window.URL || window.webkitURL;
+            blobUrl = url.createObjectURL(response.data);
+            
+          });
+      });
+      return blobUrl;
+  }
+
   public render(): React.ReactElement<IOrganizationChartProps> {
     const users = this.state.Reports;
 
     return (
       <>
-        <h4>Manager</h4>
+        <p>Manager</p>
         <Persona
           {...this.state.Manager}
           size={PersonaSize.size48}
           presence={PersonaPresence.none}
         />
-        <h4>You</h4>
+        <p>You</p>
         <Persona
           {...this.state.Me}
           size={PersonaSize.size48}
           presence={PersonaPresence.none}
         />
-        {users != null ? (
+        {users !== null ? (
           <div>
             {users.length > 0 ? (
               <div>
-                <h4>Reports</h4>
+                <p>Reports</p>
                 {users.map((user, index) => (
                   <div key={index}>
                     <Persona
