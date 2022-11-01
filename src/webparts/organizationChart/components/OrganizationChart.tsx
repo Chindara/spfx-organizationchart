@@ -1,9 +1,6 @@
 import * as React from "react";
-import styles from "./OrganizationChart.module.scss";
 import { IOrganizationChartProps } from "./IOrganizationChartProps";
-import { escape } from "@microsoft/sp-lodash-subset";
 import { MSGraphClientV3 } from "@microsoft/sp-http";
-import * as MicrosoftGraph from "@microsoft/microsoft-graph-types";
 import { IOrganizationChartState } from "./IOrganizationChartState";
 import {
   IPersonaSharedProps,
@@ -11,7 +8,6 @@ import {
   PersonaPresence,
   PersonaSize,
 } from "office-ui-fabric-react";
-import PersonaList from "../../../views/PersonaList";
 
 export default class OrganizationChart extends React.Component<
   IOrganizationChartProps,
@@ -72,7 +68,7 @@ export default class OrganizationChart extends React.Component<
 
             let reportsArr: IPersonaSharedProps[] = [];
             responses.value.forEach((item: any) => {
-              let response = {
+              let response: IPersonaSharedProps = {
                 text: item.displayName,
                 secondaryText: item.jobTitle,
               };
@@ -89,9 +85,12 @@ export default class OrganizationChart extends React.Component<
   }
 
   public render(): React.ReactElement<IOrganizationChartProps> {
-    console.log(this.state.Manager);
-    console.log(this.state.Me);
-    console.log(this.state.Reports);
+    //console.log(this.state.Manager);
+    //console.log(this.state.Me);
+    //console.log(this.state.Reports);
+    const users = this.state.Reports;
+    console.log(users);
+
     return (
       <>
         <h4>Manager2</h4>
@@ -107,15 +106,15 @@ export default class OrganizationChart extends React.Component<
           presence={PersonaPresence.none}
         />
         <h4>Reports</h4>
-        {/* {this.state.Reports.map((user, index) => (
-          <div key={index}>
-            <Persona
-              {...user}
-              size={PersonaSize.size48}
-              presence={PersonaPresence.none}
-            />
+        {/* {users[0].text} */}
+
+        {/* {users.length > 0 ? (
+          <div>
+            {users.map((user, index) => (
+              <div key={index}>{user.text}</div>
+            ))}
           </div>
-        ))} */}
+        ) : null} */}
       </>
     );
   }
