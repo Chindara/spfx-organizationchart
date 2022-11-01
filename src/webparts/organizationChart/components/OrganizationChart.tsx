@@ -11,6 +11,7 @@ import {
   PersonaPresence,
   PersonaSize,
 } from "office-ui-fabric-react";
+import PersonaList from "../../../views/PersonaList";
 
 export default class OrganizationChart extends React.Component<
   IOrganizationChartProps,
@@ -21,6 +22,7 @@ export default class OrganizationChart extends React.Component<
     this.state = {
       Me: null,
       Manager: null,
+      Reports: null,
     };
   }
 
@@ -32,7 +34,7 @@ export default class OrganizationChart extends React.Component<
           .api("/me")
           .select("displayName,jobTitle")
           .get((error, response: any, rawResponse?: any) => {
-            console.log(response);
+            // console.log(response);
             this.setState({
               Me: {
                 text: response.displayName,
@@ -49,7 +51,7 @@ export default class OrganizationChart extends React.Component<
           .api("/me/manager")
           .select("displayName,jobTitle")
           .get((error, response: any, rawResponse?: any) => {
-            console.log(response);
+            //console.log(response);
             this.setState({
               Manager: {
                 text: response.displayName,
@@ -59,28 +61,40 @@ export default class OrganizationChart extends React.Component<
           });
       });
 
-      this.props.context.msGraphClientFactory
+    this.props.context.msGraphClientFactory
       .getClient("3")
       .then((client: MSGraphClientV3): void => {
         client
           .api("/me/directReports")
           .select("displayName,jobTitle")
-          .get((error, response: any, rawResponse?: any) => {
-            console.log(response);
-            // this.setState({
-            //   Manager: {
-            //     text: response.displayName,
-            //     secondaryText: response.jobTitle,
-            //   },
-            // });
+          .get((error, responses: any, rawResponse?: any) => {
+            //console.log(responses.value);
+
+            let reportsArr: IPersonaSharedProps[] = [];
+            responses.value.forEach((item: any) => {
+              let response = {
+                text: item.displayName,
+                secondaryText: item.jobTitle,
+              };
+              //console.log(response);
+              reportsArr.push(response);
+            });
+
+            //console.log(reportsArr);
+            this.setState({ Reports: reportsArr });
           });
       });
+
+    // this.state.Reports.map((user) => console.log(user));
   }
 
   public render(): React.ReactElement<IOrganizationChartProps> {
+    console.log(this.state.Manager);
+    console.log(this.state.Me);
+    console.log(this.state.Reports);
     return (
       <>
-        <h4>Manager</h4>
+        <h4>Manager2</h4>
         <Persona
           {...this.state.Manager}
           size={PersonaSize.size48}
@@ -92,6 +106,16 @@ export default class OrganizationChart extends React.Component<
           size={PersonaSize.size48}
           presence={PersonaPresence.none}
         />
+        <h4>Reports</h4>
+        {/* {this.state.Reports.map((user, index) => (
+          <div key={index}>
+            <Persona
+              {...user}
+              size={PersonaSize.size48}
+              presence={PersonaPresence.none}
+            />
+          </div>
+        ))} */}
       </>
     );
   }
