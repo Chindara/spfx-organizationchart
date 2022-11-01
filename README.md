@@ -13,22 +13,33 @@ A simple Organisation Chart web part using Office UI Fabric, React, Graph API
 - [SharePoint Framework](https://aka.ms/spfx)
 - [Microsoft 365 tenant](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/set-up-your-developer-tenant)
 
-### Solution
-
-| Solution    | Author(s)                                               |
-| ----------- | ------------------------------------------------------- |
-| Organisation Chart | Chinthaka Bandara |
-
 ### Version history
 
 | Version | Date             | Comments        |
 | ------- | ---------------- | --------------- |
 | 1.0     | November 1, 2022 | Initial release |
 
-### Minimal Path to Awesome
+### Using the sample
 
-- Clone this repository
-- Ensure that you are at the solution folder
-- in the command-line run:
-  - **npm install**
-  - **gulp serve**
+To build and start using this project, you'll need to clone and build the package
+```shell
+https://github.com/Chindara/spfx-organizationchart.git
+```
+
+Navigate to the cloned repository folder which should be the same as the repository name
+```shell
+cd spfx-organizationchart
+```
+
+Now run the following command to install the npm packages
+```shell
+npm install
+```
+
+This will install the required npm packages and dependencies to build and run the client-side project.
+
+Once the npm packages are installed, run the following command to preview your web parts in SharePoint Workbench:
+
+```shell
+gulp serve
+```
