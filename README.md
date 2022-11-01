@@ -1,7 +1,5 @@
 ## Organisation Chart
 
-### Summary
-
 A simple Organisation Chart web part using Office UI Fabric, React, Graph API
 
 ### Used SharePoint Framework Version
@@ -11,7 +9,6 @@ A simple Organisation Chart web part using Office UI Fabric, React, Graph API
 ### Applies to
 
 - [SharePoint Framework](https://aka.ms/spfx)
-- [Microsoft 365 tenant](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/set-up-your-developer-tenant)
 
 ### Version history
 
