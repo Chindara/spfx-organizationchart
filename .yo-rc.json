@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.15.0",
+    "libraryName": "spfx-organizationchart",
+    "libraryId": "03e7924a-53c1-4b91-8963-5dc61fbbddf6",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "spfx-organizationchart",
+    "solutionShortDescription": "spfx-organizationchart description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}
