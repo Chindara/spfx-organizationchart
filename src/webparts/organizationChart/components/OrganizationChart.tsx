@@ -9,7 +9,10 @@ import {
   PersonaSize,
 } from "office-ui-fabric-react";
 
-export default class OrganizationChart extends React.Component<IOrganizationChartProps,IOrganizationChartState> {
+export default class OrganizationChart extends React.Component<
+  IOrganizationChartProps,
+  IOrganizationChartState
+> {
   constructor(props: IOrganizationChartProps) {
     super(props);
     this.state = {
@@ -90,11 +93,11 @@ export default class OrganizationChart extends React.Component<IOrganizationChar
           size={PersonaSize.size48}
           presence={PersonaPresence.none}
         />
-        <h4>Reports</h4>
         {users != null ? (
           <div>
             {users.length > 0 ? (
               <div>
+                <h4>Reports</h4>
                 {users.map((user, index) => (
                   <div key={index}>
                     <Persona
