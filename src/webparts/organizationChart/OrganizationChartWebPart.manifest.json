@@ -3,26 +3,19 @@
   "id": "36dabcc2-b67b-45ee-939d-398ec8d68b45",
   "alias": "OrganizationChartWebPart",
   "componentType": "WebPart",
-
-  // The "*" signifies that the version should be taken from the package.json
   "version": "*",
   "manifestVersion": 2,
-
-  // If true, the component can only be installed on sites where Custom Script is allowed.
-  // Components that allow authors to embed arbitrary script code should set this to true.
-  // https://support.office.com/en-us/article/Turn-scripting-capabilities-on-or-off-1f2c515f-5d7e-448a-9fd7-835da935584f
   "requiresCustomScript": false,
   "supportedHosts": ["SharePointWebPart", "TeamsPersonalApp", "TeamsTab", "SharePointFullPage"],
   "supportsThemeVariants": true,
-
   "preconfiguredEntries": [{
-    "groupId": "5c03119e-3074-46fd-976b-c60198311f70", // Other
+    "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
     "group": { "default": "Other" },
-    "title": { "default": "OrganizationChart" },
-    "description": { "default": "OrganizationChart description" },
-    "officeFabricIconFontName": "Page",
+    "title": { "default": "Organization Chart" },
+    "description": { "default": "Organization Chart" },
+    "officeFabricIconFontName": "Org",
     "properties": {
-      "description": "OrganizationChart"
+      "description": "Organization Chart"
     }
   }]
 }

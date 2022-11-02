@@ -43,3 +43,6 @@ Once the npm packages are installed, run the following command to preview your w
 ```shell
 gulp serve
 ```
+
+## Useful Links
+- https://uifabricicons.azurewebsites.net/
