@@ -45,4 +45,5 @@ gulp serve
 ```
 
 ## Useful Links
-- https://uifabricicons.azurewebsites.net/
+- [Fluent UI](https://developer.microsoft.com/en-us/fluentui#/get-started/web)
+- [Office UI Fabric Icons](https://uifabricicons.azurewebsites.net/)
