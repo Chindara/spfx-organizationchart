@@ -1,5 +1,14 @@
 @import '~office-ui-fabric-react/dist/sass/References.scss';
 
+$themePrimary: '[theme:themePrimary, default:#dc1928]';
+$themeSecondary: '[theme:themeSecondary, default:#2488d8]';
+$themeTertiary: "[theme:themeTertiary, default:#69afe5]";
+$themeLight: "[theme:themeLight, default:#b3d6f2]";
+$themeAccent: "[theme:themeAccent, default:inherit]";
+$themeDark: "[theme:themeDark, default:#005a9e]";
+$themeDarkAlt: "[theme:themeDarkAlt, default:#106ebe]";
+$themeDarker: "[theme:themeDarker, default:#004578]";
+
 .organizationChart {
   overflow: hidden;
   padding: 1em;

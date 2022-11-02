@@ -20,6 +20,9 @@ export default class OrganizationChart extends React.Component<
       Manager: null,
       Reports: null,
     };
+
+    this.getProfilePhoto = this.getProfilePhoto.bind(this);
+    this.getImageUrl = this.getImageUrl.bind(this);
   }
 
   public componentDidMount(): void {
@@ -28,34 +31,40 @@ export default class OrganizationChart extends React.Component<
       .then((client: MSGraphClientV3): void => {
         client
           .api("/me")
-          //.select("userPrincipalName,displayName,jobTitle")
+          .select("userPrincipalName,displayName,jobTitle")
           .get((error, response: any, rawResponse?: any) => {
-            console.log(response);
-            this.setState({
-              Me: {
-                imageUrl: this.getProfilePhoto(response.userPrincipalName),
-                text: response.displayName,
-                secondaryText: response.jobTitle,
-              },
-            });
+            this.getProfilePhoto(response.userPrincipalName).then(
+              (blob: any) => {
+                this.setState({
+                  Me: {
+                    imageUrl: blob,
+                    text: response.displayName,
+                    secondaryText: response.jobTitle,
+                  },
+                });
+              }
+            );
           });
       });
-
-    console.log(this.state.Me);
 
     this.props.context.msGraphClientFactory
       .getClient("3")
       .then((client: MSGraphClientV3): void => {
         client
           .api("/me/manager")
-          .select("displayName,jobTitle")
+          .select("userPrincipalName,displayName,jobTitle")
           .get((error, response: any, rawResponse?: any) => {
-            this.setState({
-              Manager: {
-                text: response.displayName,
-                secondaryText: response.jobTitle,
-              },
-            });
+            this.getProfilePhoto(response.userPrincipalName).then(
+              (blob: any) => {
+                this.setState({
+                  Manager: {
+                    imageUrl: blob,
+                    text: response.displayName,
+                    secondaryText: response.jobTitle,
+                  },
+                });
+              }
+            );
           });
       });
 
@@ -64,15 +73,20 @@ export default class OrganizationChart extends React.Component<
       .then((client: MSGraphClientV3): void => {
         client
           .api("/me/directReports")
-          .select("displayName,jobTitle")
+          .select("userPrincipalName,displayName,jobTitle")
           .get((error, responses: any, rawResponse?: any) => {
             let reportsArr: IPersonaSharedProps[] = [];
+
             responses.value.forEach((item: any) => {
-              let response: IPersonaSharedProps = {
-                text: item.displayName,
-                secondaryText: item.jobTitle,
-              };
-              reportsArr.push(response);
+              this.getProfilePhoto(item.userPrincipalName).then((blob: any) => {
+                let response: IPersonaSharedProps = {
+                  imageUrl: blob,
+                  text: item.displayName,
+                  secondaryText: item.jobTitle,
+                };
+
+                reportsArr.push(response);
+              });
             });
 
             this.setState({ Reports: reportsArr });
@@ -80,24 +94,27 @@ export default class OrganizationChart extends React.Component<
       });
   }
 
-  private getProfilePhoto(userPrincipalName: string) {
+  private getProfilePhoto(userPrincipalName: string): Promise<string> {
     console.log(userPrincipalName);
-    let blobUrl: string;
-    this.props.context.msGraphClientFactory
-      .getClient("3")
-      .then((client: MSGraphClientV3): void => {
-        client
-          .api("/users/" + userPrincipalName + "/photo/$value")
-          //.select("displayName,jobTitle")
-          .get((error, response: any, rawResponse?: any) => {
-            //console.log(response);
 
-            const url = window.URL || window.webkitURL;
-            blobUrl = url.createObjectURL(response.data);
-            
-          });
-      });
-      return blobUrl;
+    return new Promise<string>(async (resolve, reject) => {
+      this.props.context.msGraphClientFactory
+        .getClient("3")
+        .then((client: MSGraphClientV3): void => {
+          client
+            .api("/users/" + userPrincipalName + "/photo/$value")
+            .get((error, response: any, rawResponse?: any) => {
+              console.log(response);
+
+              resolve(URL.createObjectURL(response));
+            });
+        });
+    });
+  }
+
+  private getImageUrl(blob: any) {
+    const url = window.URL || window.webkitURL;
+    return url.createObjectURL(blob);
   }
 
   public render(): React.ReactElement<IOrganizationChartProps> {
