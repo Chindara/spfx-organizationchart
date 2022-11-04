@@ -2,9 +2,12 @@
 
 A simple Organisation Chart web part using Office UI Fabric, React, Graph API
 
-## Used SharePoint Framework Version
+## Compatibility
 
 ![version](https://img.shields.io/badge/version-1.13-green.svg)
+![Compatible with SharePoint Online](https://img.shields.io/badge/SharePoint%20Online-Compatible-green.svg)
+![Local Workbench Compatible](https://img.shields.io/badge/Local%20Workbench-Compatible-green.svg)
+![Hosted Workbench Compatible](https://img.shields.io/badge/Hosted%20Workbench-Compatible-green.svg)
 
 ## Applies to
 
