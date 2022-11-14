@@ -50,3 +50,4 @@ gulp serve
 ## Useful Links
 - [Fluent UI](https://developer.microsoft.com/en-us/fluentui#/get-started/web)
 - [Office UI Fabric Icons](https://uifabricicons.azurewebsites.net/)
+- [Graph Explorer](https://developer.microsoft.com/en-us/graph/graph-explorer)
