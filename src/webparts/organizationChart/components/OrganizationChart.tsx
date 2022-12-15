@@ -21,101 +21,66 @@ export default class OrganizationChart extends React.Component<
       Reports: null,
     };
 
-    this.getProfilePhoto = this.getProfilePhoto.bind(this);
-    this.getImageUrl = this.getImageUrl.bind(this);
+    //this.getProfilePhoto = this.getProfilePhoto.bind(this);
+    //this.getImageUrl = this.getImageUrl.bind(this);
   }
 
-  public componentDidMount(): void {
-    this.props.context.msGraphClientFactory
-      .getClient("3")
-      .then((client: MSGraphClientV3): void => {
-        client
-          .api("/me")
-          .select("userPrincipalName,displayName,jobTitle")
-          .get((error, response: any, rawResponse?: any) => {
-            this.getProfilePhoto(response.userPrincipalName).then(
-              (blob: any) => {
-                this.setState({
-                  Me: {
-                    imageUrl: blob,
-                    text: response.displayName,
-                    secondaryText: response.jobTitle,
-                  },
-                });
-              }
-            );
-          });
-      });
-
-    this.props.context.msGraphClientFactory
-      .getClient("3")
-      .then((client: MSGraphClientV3): void => {
-        client
-          .api("/me/manager")
-          .select("userPrincipalName,displayName,jobTitle")
-          .get((error, response: any, rawResponse?: any) => {
-            this.getProfilePhoto(response.userPrincipalName).then(
-              (blob: any) => {
-                this.setState({
-                  Manager: {
-                    imageUrl: blob,
-                    text: response.displayName,
-                    secondaryText: response.jobTitle,
-                  },
-                });
-              }
-            );
-          });
-      });
-
-    this.props.context.msGraphClientFactory
-      .getClient("3")
-      .then((client: MSGraphClientV3): void => {
-        client
-          .api("/me/directReports")
-          .select("userPrincipalName,displayName,jobTitle")
-          .get((error, responses: any, rawResponse?: any) => {
-            let reportsArr: IPersonaSharedProps[] = [];
-
-            responses.value.forEach((item: any) => {
-              this.getProfilePhoto(item.userPrincipalName).then((blob: any) => {
-                let response: IPersonaSharedProps = {
-                  imageUrl: blob,
-                  text: item.displayName,
-                  secondaryText: item.jobTitle,
-                };
-
-                reportsArr.push(response);
-              });
-            });
-
-            this.setState({ Reports: reportsArr });
-          });
-      });
+  public async componentDidMount(): Promise<void> {
+    await this.getData();
   }
 
-  private getProfilePhoto(userPrincipalName: string): Promise<string> {
-    console.log(userPrincipalName);
+  public getData = async (): Promise<void> => {
+    const client: MSGraphClientV3 =
+      await this.props.context.msGraphClientFactory.getClient("3");
+    const meResponse = await client
+      .api("/me")
+      .select("userPrincipalName,displayName,jobTitle")
+      .get();
+    //const meImage = await this.getProfilePhoto(meResponse.userPrincipalName);
 
-    return new Promise<string>(async (resolve, reject) => {
-      this.props.context.msGraphClientFactory
-        .getClient("3")
-        .then((client: MSGraphClientV3): void => {
-          client
-            .api("/users/" + userPrincipalName + "/photo/$value")
-            .get((error, response: any, rawResponse?: any) => {
-              console.log(response);
-
-              resolve(URL.createObjectURL(response));
-            });
-        });
+    this.setState({
+      Me: {
+        text: meResponse.displayName,
+        secondaryText: meResponse.jobTitle,
+      },
     });
-  }
 
-  private getImageUrl(blob: any) {
-    const url = window.URL || window.webkitURL;
-    return url.createObjectURL(blob);
-  }
+    const managerResponse = await client
+      .api("/me/manager")
+      .select("userPrincipalName,displayName,jobTitle")
+      .get();
+    //const managerImage = await this.getProfilePhoto(managerResponse.userPrincipalName);
+
+    this.setState({
+      Manager: {
+        text: managerResponse.displayName,
+        secondaryText: managerResponse.jobTitle,
+      },
+    });
+
+    const reportsResponse = await client
+      .api("/me/directReports")
+      .select("userPrincipalName,displayName,jobTitle")
+      .get();
+
+    let reportsArr: IPersonaSharedProps[] = [];
+    reportsResponse.value.forEach((item: any) => {
+      let response: IPersonaSharedProps = {
+        text: item.displayName,
+        secondaryText: item.jobTitle,
+      };
+
+      reportsArr.push(response);
+    });
+
+    this.setState({ Reports: reportsArr });
+  };
+
+  //   private getProfilePhoto = async(userPrincipalName: string): Promise<string> => {
+  //     const client: MSGraphClientV3 = await this.props.context.msGraphClientFactory.getClient("3");
+  //     const response = await client.api("/users/" + userPrincipalName + "/photo/$value").get();
+  //     return URL.createObjectURL(response);
+  //   }
 
   public render(): React.ReactElement<IOrganizationChartProps> {
     const users = this.state.Reports;
