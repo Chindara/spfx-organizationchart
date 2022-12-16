@@ -8,11 +8,24 @@ import {
   PersonaPresence,
   PersonaSize,
 } from "office-ui-fabric-react";
+import UserService from "../../../services/UserService";
+
+const presenceStatus: any[] = [];
+presenceStatus["Available"] = PersonaPresence.online;
+presenceStatus["AvailableIdle"] = PersonaPresence.online;
+presenceStatus["Away"] = PersonaPresence.away;
+presenceStatus["BeRightBack"] = PersonaPresence.away;
+presenceStatus["Busy"] = PersonaPresence.busy;
+presenceStatus["BusyIdle"] = PersonaPresence.busy;
+presenceStatus["DoNotDisturb"] = PersonaPresence.dnd;
+presenceStatus["Offline"] = PersonaPresence.offline;
+presenceStatus["PresenceUnknown"] = PersonaPresence.none;
 
 export default class OrganizationChart extends React.Component<
   IOrganizationChartProps,
   IOrganizationChartState
 > {
+  private userService: UserService;
   constructor(props: IOrganizationChartProps) {
     super(props);
     this.state = {
@@ -20,6 +33,8 @@ export default class OrganizationChart extends React.Component<
       Manager: null,
       Reports: null,
     };
+
+    this.userService = new UserService();
 
     //this.getProfilePhoto = this.getProfilePhoto.bind(this);
     //this.getImageUrl = this.getImageUrl.bind(this);
@@ -30,20 +45,35 @@ export default class OrganizationChart extends React.Component<
   }
 
   public getData = async (): Promise<void> => {
+    const meResponse: IPersonaSharedProps =
+      await this.userService.getCurrentUser(this.props.context);
+
+    if (meResponse) {
+      this.setState({
+        Me: meResponse,
+      });
+    }
     const client: MSGraphClientV3 =
       await this.props.context.msGraphClientFactory.getClient("3");
-    const meResponse = await client
-      .api("/me")
-      .select("userPrincipalName,displayName,jobTitle")
-      .get();
-    //const meImage = await this.getProfilePhoto(meResponse.userPrincipalName);
+    // const meResponse = await client
+    //   .api("/me")
+    //   .select("id,userPrincipalName,displayName,jobTitle")
+    //   .get();
+    // //const meImage = await this.getProfilePhoto(meResponse.userPrincipalName);
 
-    this.setState({
-      Me: {
-        text: meResponse.displayName,
-        secondaryText: meResponse.jobTitle,
-      },
-    });
+    // console.log(meResponse);
+
+    // this.setState({
+    //   Me: {
+    //     Id: meResponse.id,
+    //     DisplayName: meResponse.displayName,
+    //     JobTitle: meResponse.jobTitle,
+    //     Email: meResponse.userPrincipalName,
+    //     Presence: PersonaPresence.none,
+    //   },
+    // });
+
+    // this.getPresence(meResponse.id);
 
     const managerResponse = await client
       .api("/me/manager")
@@ -81,6 +111,19 @@ export default class OrganizationChart extends React.Component<
   //     const response = await client.api("/users/" + userPrincipalName + "/photo/$value").get();
   //     return URL.createObjectURL(response);
   //   }
+
+  private getPresence = async (userId: string): Promise<void> => {
+    console.log("getPresence");
+
+    const client: MSGraphClientV3 =
+      await this.props.context.msGraphClientFactory.getClient("3");
+
+    const reportsResponse = await client
+      .api("/users/" + { userId } + "/presence")
+      .get();
+
+    console.log(reportsResponse);
+  };
 
   public render(): React.ReactElement<IOrganizationChartProps> {
     const users = this.state.Reports;
