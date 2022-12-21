@@ -5,11 +5,9 @@ export interface IPersonaListProps {
 }
 
 export interface IPerson {
-  Email: string;
   DisplayName: string;
   JobTitle: string;
   Id: string;
-  Presence: PersonaPresence;
 }
 
 export interface IPersonList {
