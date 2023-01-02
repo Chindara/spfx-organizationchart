@@ -3,11 +3,13 @@ import { IOrganizationChartProps } from "./IOrganizationChartProps";
 import { MSGraphClientV3 } from "@microsoft/sp-http";
 import { IOrganizationChartState } from "./IOrganizationChartState";
 import {
+  FontSizes,
   Icon,
   IIconStyles,
   IPersonaProps,
   IPersonaSharedProps,
   IPersonaStyles,
+  mergeStyleSets,
   Persona,
   PersonaPresence,
   PersonaSize,
@@ -30,10 +32,12 @@ const personaStyles: Partial<IPersonaStyles> = {
 };
 const iconStyles: Partial<IIconStyles> = { root: { marginRight: 5 } };
 
-export default class OrganizationChart extends React.Component<
-  IOrganizationChartProps,
-  IOrganizationChartState
-> {
+const classNames = mergeStyleSets({
+  wrapper: {
+    fontSize: '11px',
+  }});
+
+export default class OrganizationChart extends React.Component<IOrganizationChartProps, IOrganizationChartState> {
   private userService: UserService;
   constructor(props: IOrganizationChartProps) {
     super(props);
@@ -54,29 +58,21 @@ export default class OrganizationChart extends React.Component<
   }
 
   public getData = async (): Promise<void> => {
-    const meResponse: IPersonaSharedProps = await this.userService.getMe(
-      this.props.context
-    );
-
+    const meResponse: IPersonaSharedProps = await this.userService.getMe(this.props.context);
     if (meResponse) {
       this.setState({
         Me: meResponse,
       });
     }
 
-    const managerResponse: IPersonaSharedProps =
-      await this.userService.getManager(this.props.context);
-
+    const managerResponse: IPersonaSharedProps = await this.userService.getManager(this.props.context);
     if (managerResponse) {
       this.setState({
         Manager: managerResponse,
       });
     }
 
-    const reportsResponse: IPersonaSharedProps[] =
-      await this.userService.getDirectReports(this.props.context);
-    console.log(reportsResponse);
-
+    const reportsResponse: IPersonaSharedProps[] = await this.userService.getDirectReports(this.props.context);
     if (reportsResponse) {
       this.setState({
         Reports: reportsResponse,
@@ -91,7 +87,7 @@ export default class OrganizationChart extends React.Component<
           iconName="Suitcase"
           styles={iconStyles}
         />
-        <i>{props.secondaryText}</i>
+        <i className={classNames.wrapper}>{props.secondaryText}</i>
       </div>
     );
   }
@@ -116,24 +112,33 @@ export default class OrganizationChart extends React.Component<
           onRenderSecondaryText={this._onRenderSecondaryText}
           styles={personaStyles}
         />
+        <p>Reports</p>
         {users !== null ? (
+          <div>{users.length}</div>
+        ): null}
+
+
+
+        {/* {users !== null ? (
           <div>
             {users.length > 0 ? (
-              <div>
-                <p>Reports</p>
+              <div> */}
+                {/* <p>Reports</p>
                 {users.map((user, index) => (
                   <div key={index}>
                     <Persona
                       {...user}
                       size={PersonaSize.size48}
+                      onRenderSecondaryText={this._onRenderSecondaryText}
+                      styles={personaStyles}
                     />
                     <br />
                   </div>
-                ))}
-              </div>
+                ))} */}
+              {/* </div>
             ) : null}
           </div>
-        ) : null}
+        ) : null} */}
       </>
     );
   }

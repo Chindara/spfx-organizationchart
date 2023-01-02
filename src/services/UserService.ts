@@ -26,13 +26,6 @@ export default class UserService {
       .select("id,userPrincipalName,displayName,jobTitle")
       .get();
 
-      console.log(apiResponse);
-    // let person: IPerson = {
-    //   Id: meResponse.id,
-    //   DisplayName: meResponse.displayName,
-    //   JobTitle: meResponse.jobTitle,
-    // };
-
     const { availability, activity } = await this.getPresence(context,String(apiResponse.id));
 
     let response: IPersonaSharedProps = {
@@ -42,13 +35,10 @@ export default class UserService {
       presenceTitle: activity,
     };
 
-    console.log(response);
     return response;
   }
 
-  public async getManager(
-    context: WebPartContext
-  ): Promise<IPersonaSharedProps> {
+  public async getManager(context: WebPartContext): Promise<IPersonaSharedProps> {
     const client: MSGraphClientV3 =
       await context.msGraphClientFactory.getClient("3");
 
@@ -57,12 +47,6 @@ export default class UserService {
       .select("id,userPrincipalName,displayName,jobTitle")
       .get();
 
-    // let person: IPerson = {
-    //   Id: meResponse.id,
-    //   DisplayName: meResponse.displayName,
-    //   JobTitle: meResponse.jobTitle,
-    // };
-
     const { availability, activity } = await this.getPresence(context,String(apiResponse.id));
 
     let response: IPersonaSharedProps = {
@@ -75,9 +59,7 @@ export default class UserService {
     return response;
   }
 
-  public async getDirectReports(
-    context: WebPartContext
-  ): Promise<IPersonaSharedProps[]> {
+  public async getDirectReports(context: WebPartContext): Promise<IPersonaSharedProps[]> {
     const client: MSGraphClientV3 =
       await context.msGraphClientFactory.getClient("3");
 
@@ -85,22 +67,6 @@ export default class UserService {
       .api("/me/directReports")
       .select("id,userPrincipalName,displayName,jobTitle")
       .get();
-
-    //console.log(meResponse);
-
-    // let personArr: IPerson[] = [];
-    // meResponse.value.forEach((item: any) => {
-
-    //   let person: IPerson = {
-    //     Id: item.id,
-    //     DisplayName: item.displayName,
-    //     JobTitle: item.jobTitle,
-    //   };
-
-    //   personArr.push(person);
-    // });
-
-    //console.log(personArr);
 
     let reportsArr: IPersonaSharedProps[] = [];
     apiResponse.value.forEach(async (item: any) => {
@@ -113,12 +79,8 @@ export default class UserService {
         presenceTitle: activity,
       };
 
-      //console.log(response);
-
       reportsArr.push(response);
     });
-
-    //console.log(reportsArr);
 
     return reportsArr;
   }
