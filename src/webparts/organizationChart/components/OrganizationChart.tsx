@@ -62,7 +62,7 @@ export default class OrganizationChart extends React.Component<IOrganizationChar
 		return (
 			<div>
 				<Icon iconName='Suitcase' styles={iconStyles} />
-				<i className={styles.secondaryText}>{props.secondaryText}</i>
+				<span className={styles.secondaryText}>{props.secondaryText}</span>
 			</div>
 		);
 	}
