@@ -1,6 +1,5 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { MSGraphClientV3 } from '@microsoft/sp-http';
-import { IPerson } from '../models/IPersonaListProps';
 import { IPersonaSharedProps, PersonaPresence } from 'office-ui-fabric-react';
 
 const presenceStatus: any[] = [];

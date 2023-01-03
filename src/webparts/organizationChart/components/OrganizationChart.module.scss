@@ -41,3 +41,24 @@ $themeDarker: "[theme:themeDarker, default:#004578]";
     }
   }
 }
+
+.primaryText {
+  font-weight: 600;
+}
+
+.secondaryText {
+  font-size: 11px;
+}
+
+.me {
+  border: 1px solid #5B5FC7;
+  padding-top: 8px;
+  padding-left: 8px;
+  margin-left: 12px;
+}
+
+.directReports {
+  padding-top: 8px;
+  padding-left: 8px;
+  margin-left: 24px;
+}

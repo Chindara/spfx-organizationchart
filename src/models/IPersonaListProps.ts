@@ -1,15 +1,15 @@
-import { IPersonaSharedProps, PersonaPresence } from "office-ui-fabric-react";
+import { IPersonaSharedProps } from 'office-ui-fabric-react';
 
 export interface IPersonaListProps {
-  Personas: IPersonaSharedProps[];
+	Personas: IPersonaSharedProps[];
 }
 
 export interface IPerson {
-  DisplayName: string;
-  JobTitle: string;
-  Id: string;
+	DisplayName: string;
+	JobTitle: string;
+	Id: string;
 }
 
 export interface IPersonList {
-  People: IPerson[];
+	People: IPerson[];
 }
